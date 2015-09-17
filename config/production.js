@@ -10,5 +10,7 @@ var config = module.exports = {
         name: parts[4],
         user: parts[1],
         password: parts[2]
-    }
+    },
+
+    api_port: process.env["PORT"]
 };
