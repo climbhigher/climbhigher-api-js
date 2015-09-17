@@ -12,7 +12,7 @@ function rootDirectory(req, res) {
         .send({
             "current_user_url": "/user",
             "current_user_sessions_url": "/sessions",
-            "mobile_startup_url": "/startup"
+            "mobile_startup_url": "/clients/start"
         });
 }
 
