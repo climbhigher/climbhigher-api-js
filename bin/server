@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+var ClimbHigher = require("../");
+ClimbHigher.api.runServer();

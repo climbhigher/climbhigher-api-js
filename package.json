@@ -1,0 +1,32 @@
+{
+  "name": "climb-higher-api",
+  "version": "0.1.0",
+  "author": "Daniel Bostwick <bostwick.d@gmail.com>",
+  "main": "./src/climb-higher/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bostwick/climb-higher-api"
+  },
+  "private": true,
+  "dependencies": {
+    "bcrypt": "^0.8.5",
+    "bluebird": "^2.9.34",
+    "body-parser": "^1.13.3",
+    "express": "^4.13.3",
+    "lodash": "^3.10.1",
+    "passport": "^0.2.2",
+    "passport-http": "^0.2.2",
+    "pg": "^4.4.1",
+    "pg-hstore": "^2.3.2",
+    "pg-native": "^1.8.1",
+    "sequelize": "^3.5.1",
+    "winston": "^1.0.1"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "jshint": "^2.6.3",
+    "mocha": "^2.2.1",
+    "sqlite3": "^3.0.5",
+    "request": "^2.57.0"
+  }
+}

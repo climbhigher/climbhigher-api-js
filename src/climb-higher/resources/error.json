@@ -1,0 +1,12 @@
+{
+    "forbidden_session": "You are not authorized to access this session",
+    "internal_error": "Internal error",
+    "invalid_apikey": "Invalid apikey",
+    "invalid_credentials": "Invalid email or password",
+    "invalid_password": "Invalid password",
+    "invalid_session": "Invalid session",
+    "invalid_tick": "Invalid tick id",
+    "invalid_user": "Invalid user",
+    "not_authenticated": "You are not authenticated",
+    "not_implemented": "Not implemented"
+}

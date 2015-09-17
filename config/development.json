@@ -1,0 +1,10 @@
+{
+    "database": {
+        "host": "localhost",
+        "name": "climbhigher_dev",
+        "user": "climbhigher",
+        "password": ""
+    },
+
+    "api_port": 1234
+}
