@@ -11,8 +11,9 @@ var env = process.env["CH_ENV"] || "development",
 logger.info("Loading config for environment " + env + " from " + configPath);
 
 if (fs.existsSync(configPath + ".js") || fs.existsSync(configPath + ".json")) {
-    module.exports = require(configPath);
+    var config = require(configPath);
+    module.exports = config;
 } else {
-    logger.error("No configuration is defined for environment " + env);
+    logger.error("No configuration defined for environment " + env);
     process.exit(1);
 }
