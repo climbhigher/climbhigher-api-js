@@ -1,5 +1,5 @@
 define RunSql
-	PGPASSWORD=$(DB_PASS) psql -h $(DB_HOST) -d $(DB_NAME) -U $(DB_USER) -f $(1)
+	@PGPASSWORD=$(DB_PASS) psql -h $(DB_HOST) -d $(DB_NAME) -U $(DB_USER) -f $(1)
 endef
 
 NODE := $(shell which node)
@@ -27,7 +27,7 @@ init-db:
 	createdb -h $(DB_HOST) -U $(DB_USER) -e $(DB_NAME)
 
 explore-db:
-	PGPASSWORD=$(DB_PASS) psql -h $(DB_HOST) -d $(DB_NAME) -U $(DB_USER)
+	@PGPASSWORD=$(DB_PASS) psql -h $(DB_HOST) -d $(DB_NAME) -U $(DB_USER)
 
 migrate:
 	$(foreach sql, $(DB_MIGRATIONS), $(call RunSql, $(sql)))
@@ -42,4 +42,5 @@ clean:
 server:
 	./bin/server
 
-.PHONY: bootstrap migrate seed test clean server
+.PHONY: bootstrap test deploy init-db explore-db migrate seed clean server
+
