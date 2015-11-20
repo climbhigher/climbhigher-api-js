@@ -17,8 +17,8 @@ var dbOptions = {
     maxConnections: 5
 };
 
-logger.info("Connection to database " + config.database.name + " on "
-    + config.database.host + " with user " + config.database.user);
+logger.info("Connecting to database " + config.database.name + " on " +
+    config.database.host);
 
 module.exports = new Sequelize(config.database.name, config.database.user,
     config.database.password, dbOptions);

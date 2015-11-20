@@ -1,5 +1,5 @@
 define RunSql
-	psql -h $(DB_HOST) -d $(DB_NAME) -U $(DB_USER) -f $(1)
+	@PGPASSWORD=$(DB_PASS) psql -h $(DB_HOST) -d $(DB_NAME) -U $(DB_USER) -f $(1)
 endef
 
 NODE := $(shell which node)
@@ -22,9 +22,14 @@ test:
 deploy:
 	git push heroku master
 
+init-db:
+	createuser -h $(DB_HOST) -s -e $(DB_USER)
+	createdb -h $(DB_HOST) -U $(DB_USER) -e $(DB_NAME)
+
+explore-db:
+	@PGPASSWORD=$(DB_PASS) psql -h $(DB_HOST) -d $(DB_NAME) -U $(DB_USER)
+
 migrate:
-	@createuser -h $(DB_HOST) -s -e $(DB_USER)
-	@createdb -h $(DB_HOST) -U $(DB_USER) -e $(DB_NAME)
 	$(foreach sql, $(DB_MIGRATIONS), $(call RunSql, $(sql)))
 
 seed:
@@ -37,4 +42,5 @@ clean:
 server:
 	./bin/server
 
-.PHONY: bootstrap migrate seed test clean server
+.PHONY: bootstrap test deploy init-db explore-db migrate seed clean server
+
