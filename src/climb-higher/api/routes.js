@@ -1,54 +1,50 @@
-"use strict";
+'use strict';
 
-var logger = require("../logger"),
-    middleware = require('../middleware'),
-    users = middleware.users,
-    sessions = middleware.sessions,
-    common = middleware.common,
-    ticks = middleware.ticks;
+const _ = require('lodash');
+const express = require('express');
+const middleware = require('./middleware');
 
-function rootDirectory(req, res) {
-    res.status(200)
-        .send({
-            "current_user_url": "/user",
-            "current_user_sessions_url": "/sessions",
-            "mobile_startup_url": "/clients/start"
-        });
-}
+function createRoutes(db) {
+    const common = _.bindAll(new middleware.Common());
+    const users = _.bindAll(new middleware.Users(db, common));
+    const sessions = _.bindAll(new middleware.Sessions(db, common));
+    const ascents = _.bindAll(new middleware.Ascents(db, common));
 
-module.exports = function(app) {
-    app.param("userId", users.fetchById);
-    app.param("sessionId", sessions.fetchById);
-    app.param("tickId", ticks.fetchById);
+    const router = express.Router();
 
-    app.get("/", rootDirectory);
+    router.param('userId', users.fetchById);
+    router.param('sessionId', sessions.fetchById);
+    router.param('ascentId', ascents.fetchById);
 
-    app.get("/clients/start", common.clientStartup);
-
-    app.route("/user")
+    router.route('/user')
         .all(common.ensureAuthenticated)
         .get(users.showLoginUser)
-        .put(users.update);
+        .put(users.update)
+        .delete(users.deleteLoginUser);
 
-    app.route("/users")
+    router.route('/users')
         .post(users.create);
 
-    app.route("/sessions")
+    router.route('/sessions')
         .all(common.ensureAuthenticated)
         .get(sessions.list)
         .post(sessions.create, sessions.show);
 
-    app.route("/sessions/:sessionId")
+    router.route('/sessions/:sessionId')
         .all(common.ensureAuthenticated, sessions.ensureOwner)
         .get(sessions.show)
         .put(sessions.update)
         .delete(sessions.destroy);
 
-    app.route("/sessions/:sessionId/ticks")
+    router.route('/sessions/:sessionId/ascents')
         .all(common.ensureAuthenticated, sessions.ensureOwner)
-        .post(ticks.create);
+        .post(ascents.create);
 
-    app.route("/sessions/:sessionId/ticks/:tickId")
+    router.route('/sessions/:sessionId/ascents/:ascentId')
         .all(common.ensureAuthenticated, sessions.ensureOwner)
-        .delete(ticks.destroy);
+        .delete(ascents.destroy);
+
+    return router;
 }
+
+module.exports = createRoutes;

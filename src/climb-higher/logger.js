@@ -1,20 +1,21 @@
-"use strict";
+'use strict';
 
-var winston = require('winston');
+const winston = require('winston');
+const Logger = winston.Logger;
 
 winston.addColors({
     info: 'green',
     warn: 'yellow',
-    error: 'red'
+    buildErrorHandler: 'red'
 });
 
-module.exports = new (winston.Logger)({
+module.exports = new Logger({
     transports: [
         new (winston.transports.Console)({
             colorize: true,
             timestamp: true,
             level: 'debug'
-        }),
+        })
         // new (winston.transports.File)({
         // timestamp: true,
         // filename: config.get('logging.filename'),

@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 
-var ClimbHigher = require("../");
-ClimbHigher.api.runServer();
+const climbHigher = require("../");
+(new climbHigher.api.ApiServer()).serve();

@@ -1,25 +1,29 @@
-"use strict";
+'use strict';
 
-var passport = require("passport"),
-    BasicStrategy = require("passport-http").BasicStrategy,
-    res = require('../resources'),
-    logger = require('../logger'),
-    User = require('../models/user');
+const _ = require('lodash');
+const passport = require('passport');
+const BasicStrategy = require('passport-http').BasicStrategy;
+const logger = require('../logger');
 
-var strategies = {
-    USER_PASSWORD_BY_HTTP: new BasicStrategy(function(email, password, done) {
-        logger.verbose("authentication.basic_auth - user " + email + " password " + password);
-
+function createUserPasswordBasicAuth(User) {
+    return new BasicStrategy((email, password, done) => {
         User.authenticate(email, password)
-            .then(function(user) { done(null, user); })
-            .catch(function(errorMsg) {
-                done(null, false, { message: errorMsg })
-            });
-    })
-};
-
-module.exports = function(app) {
-    passport.use(strategies.USER_PASSWORD_BY_HTTP);
-    app.use(passport.initialize());
-    return app;
+            .then((user) => done(null, user))
+            .catch((errMsg) => done(null, false, {message: errMsg}))
+    });
 }
+
+function Authentication(db) {
+    this.strategies['HTTP_BASIC_AUTH'] = createUserPasswordBasicAuth(db.User);
+}
+
+_.extend(Authentication.prototype, {
+    strategies: {},
+
+    init: function () {
+        passport.use(this.strategies.HTTP_BASIC_AUTH);
+        return passport.initialize();
+    }
+});
+
+module.exports = Authentication;

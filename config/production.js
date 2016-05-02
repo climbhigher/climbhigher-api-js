@@ -1,10 +1,10 @@
 "use strict";
 
-var databaseUrl = process.env["DATABASE_URL"],  // Supplied by Heroku Postgres
-    databaseRegex = /postgres:\/\/(.+)\:(.+)\@(.+)\:.+\/(.+)/,
-    parts = databaseUrl.match(databaseRegex);
+const databaseUrl = process.env["DATABASE_URL"];  // Supplied by Heroku Postgres
+const databaseRegex = /postgres:\/\/(.+)\:(.+)\@(.+)\:.+\/(.+)/;
+const parts = databaseUrl.match(databaseRegex);
 
-var config = module.exports = {
+module.exports = {
     database: {
         host: parts[3],
         name: parts[4],

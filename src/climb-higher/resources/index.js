@@ -1,5 +1,6 @@
-"use strict";
+'use strict';
 
 module.exports = {
-    error: require("./error"),
+    error: require('./error'),
+    status: require('./status')
 };

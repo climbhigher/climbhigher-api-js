@@ -39,8 +39,13 @@ clean:
 	@-dropdb -h $(DB_HOST) -U $(DB_USER) -e $(DB_NAME)
 	@-dropuser -h $(DB_HOST) -e $(DB_USER)
 
+full-test:
+	-@rm .env
+	-@ln -s .test.env .env
+	make clean init-db migrate seed test
+
 server:
 	./bin/server
 
-.PHONY: bootstrap test deploy init-db explore-db migrate seed clean server
+.PHONY: bootstrap test deploy init-db explore-db migrate seed clean server full-test
 

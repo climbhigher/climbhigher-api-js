@@ -1,11 +1,15 @@
-"use strict";
+'use strict';
+
+const api = require('./api/');
+const ClimbHigherDB = require('./database');
+const resources = require('./resources');
+const logger = require('./logger');
+const data = require('./data');
 
 module.exports = {
-    api: require("./api"),
-    config: require("./config"),
-    database: require("./database"),
-    logger: require("./logger"),
-    middleware: require("./middleware"),
-    models: require("./models"),
-    resources: require("./resources")
+    api: api,
+    ClimbHigherDB: ClimbHigherDB,
+    resources: resources,
+    logger: logger,
+    data: data
 };

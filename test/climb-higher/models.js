@@ -1,12 +1,12 @@
 "use strict";
 
-var assert = require('assert'),
-    ClimbHigher = require('../..'),
-    User = ClimbHigher.models.User,
-    errors = ClimbHigher.resources.error,
-    logger = ClimbHigher.logger;
+const assert = require('assert');
+const ClimbHigher = require('../..');
 
-logger.transports.console.level = "info";
+const db = new ClimbHigher.ClimbHigherDB();
+const User = db.User;
+const error = ClimbHigher.resources.error;
+
 
 describe('User', function() {
     describe('.findByEmail()', function() {
@@ -17,7 +17,7 @@ describe('User', function() {
         });
 
         it('returns the user with that email', function(done) {
-            var expectedEmail = "bostwick.d@gmail.com";
+            const expectedEmail = "bostwick.d@gmail.com";
 
             User.findByEmail(expectedEmail)
                 .then(function(user) {
@@ -29,17 +29,17 @@ describe('User', function() {
     });
 
     describe(".authenticate", function() {
-        it("rejects with invalid_user error for an unknown user", function(done) {
+        it("rejects with invalidUser buildErrorHandler for an unknown user", function(done) {
             User.authenticate("invalid-user@test.com", "hello word")
                 .then(function(user) { assert(false); done("accepted invalid user."); })
-                .catch(function(err) { assert(err === errors.invalid_user); done(); })
+                .catch(function(err) { assert(err === error.invalidUser); done(); })
         });
 
-        it("rejects with invalid_password for a valid user but incorrect password", function(done) {
+        it("rejects with invalidPassword for a valid user but incorrect password", function(done) {
             User.authenticate("valid-user@test.com", "invalid")
                 .then(function(user) { assert(false); done("accepted invalid password."); })
-                .catch(function(err) { assert(err === errors.invalid_password); done(); })
-        })
+                .catch(function(err) { assert(err === error.invalidPassword); done(); })
+        });
 
         it("accepts and passes user for a valid email and password", function(done) {
             User.authenticate("valid-user@test.com", "password")

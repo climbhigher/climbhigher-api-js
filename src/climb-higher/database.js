@@ -1,24 +1,53 @@
-"use strict";
+'use strict';
 
-var Sequelize = require("sequelize"),
-    config = require("./config"),
-    logger = require("./logger");
+const _ = require('underscore');
+const Sequelize = require('sequelize');
 
-var dbOptions = {
-    dialect: "postgres",
-    host: config.database.host,
-    define: {
-        paranoid: true,
-        underscored: true,
-        underscoredAll: true
+const dbConfig = require('./config').database;
+const logger = require('./logger');
+const createUserModel = require('./data/user-model');
+const createSessionModel = require('./data/session-model');
+const createAscentModel = require('./data/ascent-model');
+
+function ClimbHigherDB() {
+    this._connect();
+    this._initModels();
+}
+
+_.extend(ClimbHigherDB.prototype, {
+    dbOptions: {
+        dialect: 'postgres',
+        host: dbConfig.host,
+        define: {
+            paranoid: true,
+            underscored: true,
+            underscoredAll: true
+        },
+        logging: logger.debug,
+        minConnections: 1,
+        maxConnections: 5
     },
-    logging: logger.debug,
-    minConnections: 1,
-    maxConnections: 5
-};
 
-logger.info("Connecting to database " + config.database.name + " on " +
-    config.database.host);
+    _connect: function () {
+        logger.info('Connecting to database ' + dbConfig.name + ' on '
+            + dbConfig.host);
 
-module.exports = new Sequelize(config.database.name, config.database.user,
-    config.database.password, dbOptions);
+        this._dbCon = new Sequelize(dbConfig.name, dbConfig.user,
+            dbConfig.password, this.dbOptions);
+    },
+
+    User: null,
+    Session: null,
+    Ascent: null,
+
+    _initModels: function() {
+        this.User = createUserModel(this._dbCon);
+        this.Session = createSessionModel(this._dbCon);
+        this.Ascent = createAscentModel(this._dbCon);
+
+        this.Session.belongsTo(this.User);
+        this.Ascent.belongsTo(this.Session);
+    }
+});
+
+module.exports = ClimbHigherDB;
